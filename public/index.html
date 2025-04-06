@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Habit Tracker App"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
@@ -24,7 +24,25 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Study.io</title>
+    <!-- Script to reset the app to show default habits while ensuring light theme -->
+    <script>
+      // Force light theme
+      const data = localStorage.getItem('habit-storage');
+      if (data) {
+        try {
+          const parsedData = JSON.parse(data);
+          // Ensure the theme is set to light
+          parsedData.state.theme = 'light';
+          // Reset habits to let defaults load
+          parsedData.state.habits = [];
+          localStorage.setItem('habit-storage', JSON.stringify(parsedData));
+        } catch (e) {
+          // If parsing fails, just remove the entire storage
+          localStorage.removeItem('habit-storage');
+        }
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

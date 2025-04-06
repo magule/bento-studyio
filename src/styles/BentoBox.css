@@ -1,0 +1,132 @@
+.bento-box {
+  background-color: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  aspect-ratio: 1/1; /* Make it a perfect square */
+  cursor: pointer;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+
+.bento-box:hover {
+  transform: translateY(-5px);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 30px 0px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
+}
+
+.bento-box:active {
+  transform: scale(0.98);
+}
+
+.habit-name {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.habit-count {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-top: auto;
+  background: linear-gradient(45deg, #5e72e4, #825ee4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 0.5;
+  padding: 8px;
+  cursor: pointer;
+  color: #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.delete-btn:hover {
+  color: #ff4757;
+  background-color: rgba(249, 249, 249, 0.8);
+}
+
+/* Timer styles */
+.timer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  margin-bottom: 8px;
+}
+
+.time-display {
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.timer-btn {
+  padding: 6px 12px;
+  background: linear-gradient(90deg, #5e72e4, #825ee4);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.timer-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 8px rgba(94, 114, 228, 0.3);
+}
+
+.timer-btn.active {
+  background: linear-gradient(90deg, #f5365c, #f56036);
+}
+
+/* Randomly assign different colors to boxes */
+.bento-box:nth-child(4n+1) .habit-count {
+  background: linear-gradient(45deg, #5e72e4, #825ee4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bento-box:nth-child(4n+2) .habit-count {
+  background: linear-gradient(45deg, #2dce89, #2dcca7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bento-box:nth-child(4n+3) .habit-count {
+  background: linear-gradient(45deg, #fb6340, #fbb140);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bento-box:nth-child(4n+4) .habit-count {
+  background: linear-gradient(45deg, #f5365c, #f56036);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+} 
