@@ -12,10 +12,14 @@ function Header({ onAddClick }) {
 
   // Toggle language between English and Turkish
   const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'tr' : 'en');
+    const newLanguage = language === 'en' ? 'tr' : 'en';
+    console.log('🌐 Changing language to:', newLanguage);
+    setLanguage(newLanguage);
     
-    // Force reload default habits with new language
-    // Remove habit data but keep theme preference
+    // IMPORTANT: This was clearing all habits when changing language!
+    // Let's keep the existing habits and just update the language
+    /* 
+    // Old code that was causing issues:
     const data = localStorage.getItem('habit-storage');
     if (data) {
       try {
@@ -29,6 +33,11 @@ function Header({ onAddClick }) {
         console.error('Error updating habits with new language', e);
       }
     }
+    */
+    
+    // Simply reload to apply language changes
+    // This preserves the habits in localStorage
+    window.location.reload();
   };
 
   return (

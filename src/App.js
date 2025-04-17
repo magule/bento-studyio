@@ -8,6 +8,11 @@ import LanguageProvider from './components/LanguageProvider';
 import LanguageContext from './contexts/LanguageContext';
 import HeartAnimation from './components/HeartAnimation';
 import useHabitStore from './store/habitStore';
+import { isLocalStorageAvailable, getStoredHabits } from './utils/storageHelper';
+
+// Check if localStorage is available
+const hasLocalStorage = isLocalStorageAvailable();
+console.log('🔌 App: localStorage available:', hasLocalStorage);
 
 // Wrap content with translation context
 const AppContent = () => {
@@ -18,6 +23,29 @@ const AppContent = () => {
   const [footerClicks, setFooterClicks] = useState(0);
   // State for heart animation
   const [showHeartAnimation, setShowHeartAnimation] = useState(false);
+  // Storage status for debugging
+  const [storageStatus, setStorageStatus] = useState({ checked: false, working: false, habitCount: 0 });
+  
+  // Check storage status on mount
+  useEffect(() => {
+    if (hasLocalStorage) {
+      try {
+        const habits = getStoredHabits();
+        setStorageStatus({
+          checked: true,
+          working: true,
+          habitCount: habits ? habits.length : 0
+        });
+        console.log("✅ Storage check complete:", habits ? habits.length : 0, "habits found");
+      } catch (err) {
+        console.error("❌ Storage check failed:", err);
+        setStorageStatus({ checked: true, working: false, habitCount: 0 });
+      }
+    } else {
+      console.warn("⚠️ localStorage is not available");
+      setStorageStatus({ checked: true, working: false, habitCount: 0 });
+    }
+  }, []);
   
   // Use separate selectors to prevent unnecessary re-renders
   const habits = useHabitStore(state => state.habits);
@@ -25,6 +53,11 @@ const AppContent = () => {
   const updateCount = useHabitStore(state => state.updateCount);
   const deleteHabit = useHabitStore(state => state.deleteHabit);
   const resetHabit = useHabitStore(state => state.resetHabit);
+  
+  // Log habits from store
+  useEffect(() => {
+    console.log("📊 Current habits in store:", habits.length);
+  }, [habits]);
   
   // Add blur effect to main content when modal is open
   useEffect(() => {
@@ -123,6 +156,9 @@ const AppContent = () => {
       </div>
       
       <div id="app-content" className="flex-1 flex flex-col">
+        {/* Debug indicator - only visible in development */}
+        {/* Removing debug panel as requested */}
+        
         <main className="container mx-auto px-4 py-8 flex-1 relative z-10 transition-all duration-300">
           <AnimatePresence mode="wait">
             {habits.length === 0 ? (
@@ -170,7 +206,7 @@ const AppContent = () => {
               } ${footerClicks === 2 ? 'pulse-animation font-bold' : ''}`}
               onClick={handleFooterClick}
             >
-              FK-BÇ{footerClicks > 0 ? ` (${footerClicks}/3)` : ''}
+              B-F{footerClicks > 0 ? ` (${footerClicks}/3)` : ''}
             </span>
           </div>
         </footer>

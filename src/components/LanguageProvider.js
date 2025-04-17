@@ -22,7 +22,12 @@ const LanguageProvider = ({ children }) => {
   
   // Save language preference whenever it changes
   useEffect(() => {
+    console.log('💬 Setting language preference:', language);
     localStorage.setItem('language', language);
+    
+    // Important: When language changes, we need to update default habit names
+    // but we don't want to lose user's habits or reset them
+    // This is a safer approach that doesn't interfere with habit storage
   }, [language]);
   
   return (

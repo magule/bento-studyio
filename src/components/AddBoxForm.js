@@ -42,13 +42,22 @@ function AddBoxForm({ addHabit, onCancel }) {
     
     if (!title.trim()) return;
     
-    addHabit({
+    const newHabit = {
       name: title.trim(),
       description: description.trim(),
       bgColor: COLOR_MAP[bgColor] || '', // Convert class name to hex value
       count,
       timerDuration: parseInt(timerDuration, 10) || 0
-    });
+    };
+    
+    console.log('🆕 Submitting new habit:', newHabit);
+    
+    addHabit(newHabit);
+    
+    // Log localStorage after adding
+    setTimeout(() => {
+      console.log('🧾 Form localStorage check:', localStorage.getItem('habit-storage'));
+    }, 300);
     
     // Reset form
     setTitle('');
