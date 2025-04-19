@@ -36,6 +36,8 @@ function AddBoxForm({ addHabit, onCancel }) {
   const [bgColor, setBgColor] = useState('bg-pastel-blue');
   const [count, setCount] = useState(0);
   const [timerDuration, setTimerDuration] = useState(0);
+  const [showCustomTimer, setShowCustomTimer] = useState(false);
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -75,7 +77,10 @@ function AddBoxForm({ addHabit, onCancel }) {
       exit={{ opacity: 0, y: -20 }}
     >
       <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-400/20 to-teal-400/20 dark:from-blue-500/30 dark:to-teal-500/30">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{t('addNewHabit')}</h2>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{t('addNewHabit')}</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-300 mt-0.5">Keep track of your habits and studies</p>
+        </div>
         <button 
           onClick={onCancel}
           className="p-1 rounded-full bg-white/80 dark:bg-dark-700/80 hover:bg-white dark:hover:bg-dark-600 transition-colors"
@@ -113,6 +118,71 @@ function AddBoxForm({ addHabit, onCancel }) {
             rows="2"
           />
         </div>
+
+        {/* Timer Duration - Moved out of advanced options */}
+        <div className="mb-6 bg-gray-50 dark:bg-dark-700 rounded-xl p-4 border border-gray-100 dark:border-dark-600">
+          <label className="block text-gray-700 dark:text-gray-200 mb-3 font-medium flex items-center justify-between" htmlFor="timer">
+            <div className="flex items-center gap-2">
+              <span>{t('timerDuration')}</span>
+              <label className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 cursor-pointer bg-gray-100 dark:bg-dark-600 px-2 py-0.5 rounded-full">
+                <input
+                  type="checkbox"
+                  checked={showCustomTimer}
+                  onChange={() => setShowCustomTimer(!showCustomTimer)}
+                  className="rounded text-blue-500 focus:ring-0 h-3 w-3 cursor-pointer"
+                />
+                <span>Custom</span>
+              </label>
+            </div>
+            <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
+              {timerDuration ? `${timerDuration}${t('timerMinutes')}` : t('timerOff')}
+            </span>
+          </label>
+          
+          {/* Timer Range Slider */}
+          <input
+            type="range"
+            id="timer"
+            min="0"
+            max="240"
+            step="5"
+            value={timerDuration}
+            onChange={(e) => setTimerDuration(parseInt(e.target.value, 10))}
+            className="w-full h-2 bg-gray-200 dark:bg-dark-500 rounded-lg appearance-none cursor-pointer accent-blue-500 mb-2"
+          />
+          <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-3">
+            <span>0{t('timerMinutes')}</span>
+            <span>120{t('timerMinutes')}</span>
+            <span>240{t('timerMinutes')}</span>
+          </div>
+          
+          {/* Custom Timer Input - Simplified */}
+          {showCustomTimer && (
+            <div className="flex items-center justify-center mb-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-dark-600 rounded-lg border border-gray-200 dark:border-dark-500 w-fit">
+                <input
+                  type="number"
+                  min="0"
+                  max="240"
+                  value={timerDuration}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === '') {
+                      setTimerDuration(0);
+                    } else {
+                      const numValue = parseInt(value, 10);
+                      if (numValue >= 0 && numValue <= 240) {
+                        setTimerDuration(numValue);
+                      }
+                    }
+                  }}
+                  className="w-16 bg-transparent border-none focus:ring-0 p-0 text-center text-gray-800 dark:text-gray-100"
+                />
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('timerMinutes')}</span>
+              </div>
+            </div>
+          )}
+        </div>
         
         <div className="mb-6">
           <label className="block text-gray-700 dark:text-gray-200 mb-2 font-medium">
@@ -126,7 +196,7 @@ function AddBoxForm({ addHabit, onCancel }) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setBgColor(colorClass)}
-                style={{ backgroundColor: COLOR_MAP[colorClass] }} // Use the hex color from our map
+                style={{ backgroundColor: COLOR_MAP[colorClass] }}
                 className={`w-9 h-9 rounded-full p-0.5 transition-transform ${bgColor === colorClass ? 'ring-2 ring-offset-2 ring-blue-500' : ''}`}
                 aria-label={`Select ${colorClass} color`}
               >
@@ -144,65 +214,43 @@ function AddBoxForm({ addHabit, onCancel }) {
           </div>
         </div>
 
-        <Disclosure as="div" className="mb-6">
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="flex w-full justify-between items-center p-3 text-left text-sm font-medium rounded-lg bg-gray-100 dark:bg-dark-600 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-dark-500 transition-colors">
-                <span>{t('advancedOptions')}</span>
-                {open ? (
-                  <ChevronUpIcon className="h-5 w-5" />
-                ) : (
-                  <ChevronDownIcon className="h-5 w-5" />
-                )}
-              </Disclosure.Button>
-              <Disclosure.Panel className="p-4 bg-gray-50 dark:bg-dark-700 rounded-lg mt-2">
-                <div className="mb-4">
-                  <label className="block text-gray-700 dark:text-gray-200 mb-2 font-medium" htmlFor="timer">
-                    {t('timerDuration')}
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="range"
-                      id="timer"
-                      min="0"
-                      max="120"
-                      step="5"
-                      value={timerDuration}
-                      onChange={(e) => setTimerDuration(e.target.value)}
-                      className="w-full h-2 bg-gray-200 dark:bg-dark-500 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                    />
-                    <span className="text-gray-700 dark:text-gray-300 min-w-[3rem] text-center">
-                      {timerDuration ? `${timerDuration}${t('timerMinutes')}` : t('timerOff')}
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {t('timerDescription')}
-                  </p>
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <label className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 cursor-pointer bg-gray-100 dark:bg-dark-600 px-2 py-0.5 rounded-full">
+              <input
+                type="checkbox"
+                checked={showAdvancedOptions}
+                onChange={() => setShowAdvancedOptions(!showAdvancedOptions)}
+                className="rounded text-blue-500 focus:ring-0 h-3 w-3 cursor-pointer"
+              />
+              <span>{t('advancedOptions')}</span>
+            </label>
+          </div>
+          
+          {showAdvancedOptions && (
+            <div className="p-4 bg-gray-50 dark:bg-dark-700 rounded-lg">
+              <div>
+                <label className="block text-gray-700 dark:text-gray-200 mb-2 font-medium" htmlFor="count">
+                  {t('initialCount')}
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    id="count"
+                    min="0"
+                    max="100"
+                    value={count}
+                    onChange={(e) => setCount(parseInt(e.target.value, 10))}
+                    className="w-full h-2 bg-gray-200 dark:bg-dark-500 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  />
+                  <span className="text-gray-700 dark:text-gray-300 min-w-[2.5rem] text-center">
+                    {count}
+                  </span>
                 </div>
-                
-                <div>
-                  <label className="block text-gray-700 dark:text-gray-200 mb-2 font-medium" htmlFor="count">
-                    {t('initialCount')}
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="range"
-                      id="count"
-                      min="0"
-                      max="100"
-                      value={count}
-                      onChange={(e) => setCount(parseInt(e.target.value, 10))}
-                      className="w-full h-2 bg-gray-200 dark:bg-dark-500 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                    />
-                    <span className="text-gray-700 dark:text-gray-300 min-w-[2.5rem] text-center">
-                      {count}
-                    </span>
-                  </div>
-                </div>
-              </Disclosure.Panel>
-            </>
+              </div>
+            </div>
           )}
-        </Disclosure>
+        </div>
 
         <div className="flex gap-3 justify-end">
           <button

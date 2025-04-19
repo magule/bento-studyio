@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef, useContext } from 'react';
-import { motion } from 'framer-motion';
-import { XMarkIcon, PlayIcon, PauseIcon, ArrowPathIcon, SwatchIcon } from '@heroicons/react/24/outline';
+import { motion, AnimatePresence } from 'framer-motion';
+import { XMarkIcon, PlayIcon, PauseIcon, ArrowPathIcon, SwatchIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
 import { FireIcon } from '@heroicons/react/24/solid';
 import useHabitStore from '../store/habitStore';
 import LanguageContext from '../contexts/LanguageContext';
@@ -11,7 +11,9 @@ const BentoBox = ({ habit, onClick, onDelete, onReset }) => {
   const [timerActive, setTimerActive] = useState(false);
   const [timerCompleted, setTimerCompleted] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const colorPickerRef = useRef(null);
+  const infoRef = useRef(null);
   const updateHabit = useHabitStore(state => state.updateHabit);
 
   // Predefined pastel colors from tailwind.config.js
@@ -36,11 +38,45 @@ const BentoBox = ({ habit, onClick, onDelete, onReset }) => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Format total time based on duration and count
+  const formatTotalTime = useCallback(() => {
+    const totalMinutes = habit.timerDuration * habit.count;
+    
+    if (totalMinutes < 60) {
+      const unit = totalMinutes === 1 ? t('timeUnits.minute') : t('timeUnits.minutes');
+      return totalMinutes + ' ' + unit;
+    } else {
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      
+      if (minutes === 0) {
+        const unit = hours === 1 ? t('timeUnits.hour') : t('timeUnits.hours');
+        return hours + ' ' + unit;
+      } else {
+        return hours + ' ' + t('timeUnits.hour') + ' ' + minutes + ' ' + t('timeUnits.minute');
+      }
+    }
+  }, [habit.timerDuration, habit.count, t]);
+
   // Close color picker when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (colorPickerRef.current && !colorPickerRef.current.contains(event.target)) {
         setShowColorPicker(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Close info popover when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (infoRef.current && !infoRef.current.contains(event.target)) {
+        setShowInfo(false);
       }
     }
 
@@ -96,6 +132,11 @@ const BentoBox = ({ habit, onClick, onDelete, onReset }) => {
   const handleCustomColorChange = useCallback((e) => {
     updateHabit(habit.id, { ...habit, bgColor: e.target.value });
   }, [habit, updateHabit]);
+
+  const handleInfoClick = useCallback((e) => {
+    e.stopPropagation();
+    setShowInfo(prev => !prev);
+  }, []);
 
   // Reset timer when timerDuration changes
   useEffect(() => {
@@ -214,22 +255,22 @@ const BentoBox = ({ habit, onClick, onDelete, onReset }) => {
               className={`p-1.5 rounded-full ${habit.bgColor && !isLightColor(habit.bgColor) 
                 ? 'bg-white/20 text-white hover:bg-white/30' 
                 : 'bg-gray-100 dark:bg-white/20 text-gray-500 dark:text-white hover:text-primary-500 dark:hover:bg-white/30'}`}
-              onClick={handleColorClick}
-              title={t('changeColor')}
+              onClick={handleInfoClick}
+              title={t('info')}
             >
-              <SwatchIcon className="h-4 w-4" />
+              <InformationCircleIcon className="h-4 w-4" />
             </motion.button>
-            
+
             <motion.button
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.9 }}
               className={`p-1.5 rounded-full ${habit.bgColor && !isLightColor(habit.bgColor) 
                 ? 'bg-white/20 text-white hover:bg-white/30' 
-                : 'bg-gray-100 dark:bg-white/20 text-gray-500 dark:text-white hover:text-accent-500 dark:hover:bg-white/30'}`}
-              onClick={handleResetClick}
-              title={t('reset')}
+                : 'bg-gray-100 dark:bg-white/20 text-gray-500 dark:text-white hover:text-primary-500 dark:hover:bg-white/30'}`}
+              onClick={handleColorClick}
+              title={t('changeColor')}
             >
-              <ArrowPathIcon className="h-4 w-4" />
+              <SwatchIcon className="h-4 w-4" />
             </motion.button>
             
             <motion.button
@@ -245,6 +286,39 @@ const BentoBox = ({ habit, onClick, onDelete, onReset }) => {
             </motion.button>
           </div>
         </div>
+        
+        {/* Info Popover */}
+        <AnimatePresence>
+          {showInfo && (
+            <motion.div
+              ref={infoRef}
+              className="absolute top-16 right-4 w-64 bg-white dark:bg-dark-800 rounded-xl shadow-lg p-4 z-50"
+              initial={{ opacity: 0, scale: 0.95, y: -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mb-4">
+                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2"></h4>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{habit.description || t('noDescription')}</p>
+              </div>
+              
+              <div className="border-t border-gray-200 dark:border-dark-600 pt-3">
+                <button
+                  onClick={(e) => {
+                    handleResetClick(e);
+                    setShowInfo(false);
+                  }}
+                  className="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 flex items-center gap-2"
+                >
+                  <ArrowPathIcon className="h-4 w-4" />
+                  {t('reset')}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         
         {/* Color Picker */}
         {showColorPicker && (
@@ -318,7 +392,11 @@ const BentoBox = ({ habit, onClick, onDelete, onReset }) => {
                   {formatTime(timeLeft)}
                 </div>
                 <div className={`text-sm opacity-70 ${textColorClass}`}>
-                  {t('habitCount')}: {habit.count}
+                  {t('totalTime') + ': '}
+                  {habit.count === 0 
+                    ? '0 ' + t('timeUnits.minutes')
+                    : formatTotalTime()
+                  }
                 </div>
               </div>
             )}

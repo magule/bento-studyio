@@ -2,11 +2,26 @@
 const translations = {
   en: {
     // App and general
-    appName: 'Study.io',
+    title: 'Bento Habit',
     appTagline: '-',
     noHabitsYet: 'No habits yet',
     addFirstHabit: 'Click the + button in the top right to add your first habit and get started with your tracking journey!',
     about: 'About',
+    settings: 'Settings',
+    language: 'Language',
+    theme: 'Theme',
+    notifications: 'Notifications',
+    miniGame: 'Mini Game',
+    game: {
+      win: 'You won! 🎉',
+      lose: 'You lost! 😅',
+      draw: 'Draw! 🤝'
+    },
+    languages: {
+      en: 'English',
+      tr: 'Turkish',
+      es: 'Spanish'
+    },
     
     // AddBoxForm
     addNewHabit: 'Add New Habit',
@@ -31,11 +46,19 @@ const translations = {
     startAgain: 'Start Again',
     dayStreak: 'day streak',
     habitCount: 'Total Hours',
+    totalTime: 'Total Time',
+    timeUnits: {
+      minute: 'min',
+      minutes: 'mins',
+      hour: 'hour',
+      hours: 'hours'
+    },
     
     // Actions
     changeColor: 'Change Color',
     reset: 'Reset',
     delete: 'Delete',
+    info: 'Info',
     
     // Subject names
     physics: 'Physics',
@@ -49,11 +72,26 @@ const translations = {
   },
   tr: {
     // Uygulama ve genel
-    appName: 'Study.io',
+    title: 'Bento Habit',
     appTagline: '-',
     noHabitsYet: 'Henüz alışkanlık yok',
     addFirstHabit: 'İlk alışkanlığını eklemek için sağ üstteki + butonuna tıkla ve takip yolculuğuna başla!',
     about: 'Hakkında',
+    settings: 'Ayarlar',
+    language: 'Dil',
+    theme: 'Tema',
+    notifications: 'Bildirimler',
+    miniGame: 'Mini Oyun',
+    game: {
+      win: 'Kazandın! 🎉',
+      lose: 'Kaybettin! 😅',
+      draw: 'Berabere! 🤝'
+    },
+    languages: {
+      en: 'İngilizce',
+      tr: 'Türkçe',
+      es: 'İspanyolca'
+    },
     
     // AddBoxForm
     addNewHabit: 'Yeni Alışkanlık Ekle',
@@ -78,11 +116,19 @@ const translations = {
     startAgain: 'Tekrar Başlat',
     dayStreak: 'günlük seri',
     habitCount: 'Tamamlanan',
+    totalTime: 'Toplam Süre',
+    timeUnits: {
+      minute: 'dk',
+      minutes: 'dk',
+      hour: 'saat',
+      hours: 'saat'
+    },
     
     // Actions
     changeColor: 'Renk Değiştir',
     reset: 'Sıfırla',
     delete: 'Sil',
+    info: 'Bilgi',
     
     // Subject names
     physics: 'Fizik',
@@ -93,6 +139,76 @@ const translations = {
     physicsDesc: 'Fizik çalışması',
     chemistryDesc: 'Kimya çalışması',
     biologyDesc: 'Biyoloji çalışması',
+  },
+  es: {
+    // Aplicación y general
+    title: 'Bento Habit',
+    appTagline: '-',
+    noHabitsYet: 'Aún no hay hábitos',
+    addFirstHabit: '¡Haz clic en el botón + en la esquina superior derecha para agregar tu primer hábito y comenzar tu viaje de seguimiento!',
+    about: 'Acerca de',
+    settings: 'Configuración',
+    language: 'Idioma',
+    theme: 'Tema',
+    notifications: 'Notificaciones',
+    miniGame: 'Mini Juego',
+    game: {
+      win: '¡Ganaste! 🎉',
+      lose: '¡Perdiste! 😅',
+      draw: '¡Empate! 🤝'
+    },
+    languages: {
+      en: 'Inglés',
+      tr: 'Turco',
+      es: 'Español'
+    },
+    
+    // AddBoxForm
+    addNewHabit: 'Agregar Nuevo Hábito',
+    habitTitle: 'Título del Hábito',
+    habitTitlePlaceholder: '¿Qué quieres seguir?',
+    description: 'Descripción (opcional)',
+    descriptionPlaceholder: 'Agregar más detalles...',
+    backgroundColor: 'Color de Fondo',
+    advancedOptions: 'Opciones Avanzadas',
+    timerDuration: 'Duración del Temporizador (minutos)',
+    timerOff: 'Apagado',
+    timerMinutes: 'm',
+    timerDescription: 'Establece 0 para no usar temporizador o elige los minutos para una cuenta regresiva',
+    initialCount: 'Conteo Inicial',
+    cancel: 'Cancelar',
+    addHabit: 'Agregar Hábito',
+    
+    // BentoBox
+    start: 'Iniciar',
+    resume: 'Reanudar',
+    pause: 'Pausar',
+    startAgain: 'Comenzar de Nuevo',
+    dayStreak: 'días seguidos',
+    habitCount: 'Horas Totales',
+    totalTime: 'Tiempo Total',
+    timeUnits: {
+      minute: 'min',
+      minutes: 'mins',
+      hour: 'hora',
+      hours: 'horas'
+    },
+    
+    // Actions
+    changeColor: 'Cambiar Color',
+    reset: 'Reiniciar',
+    delete: 'Eliminar',
+    info: 'Info',
+    
+    // Subject names
+    physics: 'Física',
+    chemistry: 'Química', 
+    biology: 'Biología',
+    
+    // Subject descriptions
+    physicsDesc: 'Estudio de física',
+    chemistryDesc: 'Estudio de química',
+    biologyDesc: 'Estudio de biología',
   }
 };
 

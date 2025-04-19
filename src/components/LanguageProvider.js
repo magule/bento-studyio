@@ -7,17 +7,36 @@ const LanguageProvider = ({ children }) => {
     // Check if the user has a saved preference
     const savedLanguage = localStorage.getItem('language');
     
-    // Default to Turkish if no preference
-    return savedLanguage || 'tr';
+    // Default to English if no preference
+    return savedLanguage || 'en';
   });
   
-  // Translation function
+  // Enhanced translation function that handles nested keys
   const t = (key) => {
     if (!translations[language]) {
-      return translations.en[key] || key;
+      return getNestedTranslation(translations.en, key) || key;
     }
     
-    return translations[language][key] || translations.en[key] || key;
+    return getNestedTranslation(translations[language], key) || 
+           getNestedTranslation(translations.en, key) || 
+           key;
+  };
+  
+  // Helper function to get nested translations
+  const getNestedTranslation = (obj, path) => {
+    // Handle dot notation for nested keys (e.g., 'timeUnits.minute')
+    const keys = path.split('.');
+    let result = obj;
+    
+    for (const key of keys) {
+      if (result && typeof result === 'object' && key in result) {
+        result = result[key];
+      } else {
+        return undefined;
+      }
+    }
+    
+    return result;
   };
   
   // Save language preference whenever it changes

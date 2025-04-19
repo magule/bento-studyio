@@ -10,63 +10,13 @@ console.log('🔌 localStorage available in habitStore:', hasLocalStorage);
 
 // Get the current language from localStorage
 const getCurrentLanguage = () => {
-  if (!hasLocalStorage) return 'tr';
-  return localStorage.getItem('language') || 'tr';
+  if (!hasLocalStorage) return 'en';
+  return localStorage.getItem('language') || 'en';
 };
 
 // Initialize with default habits if the store is empty
 const createDefaultHabits = () => {
-  const now = new Date().toISOString();
-  const lang = getCurrentLanguage();
-  const t = (key) => translations[lang][key] || translations.en[key] || key;
-  
-  return [
-    {
-      id: `default-1-${Date.now()}`,
-      name: t('physics'),
-      description: t('physicsDesc'),
-      count: 0,
-      bgColor: '#F9A8D4', // Pink color
-      textColor: '',
-      timerDuration: 60, // 1 hour
-      countDirection: 'up',
-      countAmount: 1,
-      createdAt: now,
-      lastUpdated: now,
-      streak: 0,
-      history: []
-    },
-    {
-      id: `default-2-${Date.now()}`,
-      name: t('chemistry'),
-      description: t('chemistryDesc'),
-      count: 0,
-      bgColor: '#C4B5FD', // Purple color
-      textColor: '',
-      timerDuration: 60, // 1 hour
-      countDirection: 'up',
-      countAmount: 1,
-      createdAt: now,
-      lastUpdated: now,
-      streak: 0,
-      history: []
-    },
-    {
-      id: `default-3-${Date.now()}`,
-      name: t('biology'),
-      description: t('biologyDesc'),
-      count: 0,
-      bgColor: '#BEF264', // Khaki green (lime-300)
-      textColor: '',
-      timerDuration: 60, // 1 hour
-      countDirection: 'up',
-      countAmount: 1,
-      createdAt: now,
-      lastUpdated: now,
-      streak: 0,
-      history: []
-    }
-  ];
+  return [];  // Return empty array instead of default habits
 };
 
 // Pre-initialize localStorage with default habits if needed
@@ -78,7 +28,7 @@ if (hasLocalStorage) {
     const storedHabits = getStoredHabits();
     
     if (!storedHabits || storedHabits.length === 0) {
-      console.log('🏁 No valid habits found, initializing with default habits');
+      console.log('🏁 No valid habits found, initializing with empty habits array');
       const defaultHabits = createDefaultHabits();
       setStoredHabits(defaultHabits);
     } else {
